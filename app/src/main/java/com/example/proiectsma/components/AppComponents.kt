@@ -4,6 +4,7 @@ import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,10 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -161,8 +165,8 @@ fun PasswordTextField(labelValue : String, icon : ImageVector) {
 }
 
 @Composable
-fun ButtonComponent(value : String){
-    Button(onClick = { /*TODO*/ },
+fun ButtonComponent(value : String, onButtonSelected: () -> Unit){
+    Button(onClick = { onButtonSelected() },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),
@@ -187,7 +191,7 @@ fun ButtonComponent(value : String){
 }
 
 @Composable
-fun ClickableLoginTextComponent(tryingToLogin : Boolean = true, onTextSelected: (String) -> Unit ){
+fun ClickableLoginTextComponent(tryingToLogin : Boolean = true, onTextSelected: () -> Unit ){
     val initialText = if(tryingToLogin) "Already have an account? " else "Don't have an account yet? "
     val loginText = if(tryingToLogin) "Login" else "Register"
 
@@ -214,6 +218,8 @@ fun ClickableLoginTextComponent(tryingToLogin : Boolean = true, onTextSelected: 
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 40.dp)
+            .clickable { onTextSelected() }
+            /*
             .pointerInput(Unit) {
                 detectTapGestures { offset: Offset ->
                     // Map the tap to a character position
@@ -231,6 +237,8 @@ fun ClickableLoginTextComponent(tryingToLogin : Boolean = true, onTextSelected: 
                     }
                 }
             }
+
+             */
     )
 
 }
@@ -277,5 +285,39 @@ fun DividerTextComponent() {
             color = Color.Gray,
             thickness = 1.dp
         )
+    }
+}
+
+@Composable
+fun Announcement(description : String){
+    Card(
+        content = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(48.dp)
+                    .background(
+                        color = Color.Gray,
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                    .padding(vertical = 20.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = description,
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun AnnouncementList(descriptionList : List<String>){
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        items(descriptionList) { description ->
+            Announcement(description = description)
+        }
     }
 }

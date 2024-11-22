@@ -59,6 +59,8 @@ dependencies {
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
+    implementation (libs.androidx.navigation.compose)
+
     // Choose one of the following:
     // Material Design 3
     implementation(libs.androidx.material3)

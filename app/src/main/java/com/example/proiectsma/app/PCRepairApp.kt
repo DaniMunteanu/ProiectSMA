@@ -20,10 +20,10 @@ fun PCRepairApp(){
         Crossfade(targetState = PCRepairAppRouter.currentScreen) { currentState->
             when(currentState.value){
                 is Screen.SignUpScreen -> {
-                    SignUpScreen()
+                    //SignUpScreen()
                 }
                 is Screen.LoginScreen -> {
-                    LoginScreen()
+                    //LoginScreen()
                 }
             }
 

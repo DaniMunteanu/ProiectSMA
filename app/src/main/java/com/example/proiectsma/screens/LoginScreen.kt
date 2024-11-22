@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.proiectsma.components.ButtonComponent
 import com.example.proiectsma.components.ClickableLoginTextComponent
 import com.example.proiectsma.components.DividerTextComponent
@@ -28,7 +30,7 @@ import com.example.proiectsma.navigation.PCRepairAppRouter
 import com.example.proiectsma.navigation.Screen
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(navController: NavController){
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -47,12 +49,12 @@ fun LoginScreen(){
 
             UnderlinedTextComponent(value = "Forgot your password?")
 
-            ButtonComponent(value = "Login")
+            ButtonComponent(value = "Log in", onButtonSelected = { navController.navigate("home_screen") })
 
             DividerTextComponent()
 
             ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
-                PCRepairAppRouter.navigateTo(Screen.SignUpScreen)
+                navController.navigate("sign_up_screen")
             })
         }
     }
@@ -61,5 +63,6 @@ fun LoginScreen(){
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    val mockNavController = rememberNavController()
+    LoginScreen(mockNavController)
 }

@@ -16,6 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.proiectsma.app.PCRepairApp
 import com.example.proiectsma.components.ButtonComponent
 import com.example.proiectsma.components.ClickableLoginTextComponent
@@ -28,7 +31,7 @@ import com.example.proiectsma.navigation.PCRepairAppRouter
 import com.example.proiectsma.navigation.Screen
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(navController: NavController) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -46,12 +49,12 @@ fun SignUpScreen() {
 
 
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = "Register")
+            ButtonComponent(value = "Register", onButtonSelected = { navController.navigate("home_screen") })
             Spacer(modifier = Modifier.height(20.dp))
             DividerTextComponent()
 
             ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
-                PCRepairAppRouter.navigateTo(Screen.LoginScreen)
+                navController.navigate("login_screen")
             })
         }
     }
@@ -60,5 +63,6 @@ fun SignUpScreen() {
 @Preview
 @Composable
 fun DefaultPreviewOfSignUpScreen() {
-    SignUpScreen()
+    val mockNavController = rememberNavController()
+    SignUpScreen(mockNavController)
 }
