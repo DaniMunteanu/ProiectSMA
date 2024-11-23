@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.9.3"
-agp = "8.5.2"
+agp = "8.7.0"
 androidxNavigationCompose = "2.8.4"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"

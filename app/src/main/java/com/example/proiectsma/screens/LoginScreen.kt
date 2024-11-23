@@ -22,12 +22,14 @@ import com.example.proiectsma.components.ButtonComponent
 import com.example.proiectsma.components.ClickableLoginTextComponent
 import com.example.proiectsma.components.DividerTextComponent
 import com.example.proiectsma.components.HeadingTextComponent
+import com.example.proiectsma.components.MotionSensorBox
 import com.example.proiectsma.components.NormalTextComponent
 import com.example.proiectsma.components.PasswordTextField
 import com.example.proiectsma.components.RegularTextField
 import com.example.proiectsma.components.UnderlinedTextComponent
 import com.example.proiectsma.navigation.PCRepairAppRouter
 import com.example.proiectsma.navigation.Screen
+
 
 @Composable
 fun LoginScreen(navController: NavController){
@@ -56,6 +58,8 @@ fun LoginScreen(navController: NavController){
             ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
                 navController.navigate("sign_up_screen")
             })
+
+            MotionSensorBox()
         }
     }
 }
