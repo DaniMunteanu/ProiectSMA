@@ -213,9 +213,6 @@ fun ClickableLoginTextComponent(tryingToLogin : Boolean = true, onTextSelected: 
         }
     }
 
-    // Remember the layout result to resolve clicks
-    var layoutResult: TextLayoutResult? = remember { null }
-
     Text(
         text = annotatedString,
         style = TextStyle(
@@ -229,26 +226,6 @@ fun ClickableLoginTextComponent(tryingToLogin : Boolean = true, onTextSelected: 
             .fillMaxWidth()
             .heightIn(min = 40.dp)
             .clickable { onTextSelected() }
-            /*
-            .pointerInput(Unit) {
-                detectTapGestures { offset: Offset ->
-                    // Map the tap to a character position
-                    layoutResult?.let { result ->
-                        val position = result.getOffsetForPosition(offset)
-                        annotatedString.getStringAnnotations(
-                            tag = "loginText",
-                            start = position,
-                            end = position
-                        ).firstOrNull()?.let { annotation ->
-                            if (annotation.item == "loginText") {
-                                onTextSelected(annotation.item)
-                            }
-                        }
-                    }
-                }
-            }
-
-             */
     )
 
 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.proiectsma.app.PCRepairApp
+import com.example.proiectsma.AuthViewModel
 import com.example.proiectsma.components.ButtonComponent
 import com.example.proiectsma.components.ClickableLoginTextComponent
 import com.example.proiectsma.components.DividerTextComponent
@@ -31,7 +31,7 @@ import com.example.proiectsma.navigation.PCRepairAppRouter
 import com.example.proiectsma.navigation.Screen
 
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -64,5 +64,6 @@ fun SignUpScreen(navController: NavController) {
 @Composable
 fun DefaultPreviewOfSignUpScreen() {
     val mockNavController = rememberNavController()
-    SignUpScreen(mockNavController)
+    val mockAuthViewModel = AuthViewModel()
+    SignUpScreen(mockNavController, mockAuthViewModel)
 }

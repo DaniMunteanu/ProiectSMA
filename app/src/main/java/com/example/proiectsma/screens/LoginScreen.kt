@@ -12,12 +12,17 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Mail
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.proiectsma.AuthViewModel
 import com.example.proiectsma.components.ButtonComponent
 import com.example.proiectsma.components.ClickableLoginTextComponent
 import com.example.proiectsma.components.DividerTextComponent
@@ -32,7 +37,16 @@ import com.example.proiectsma.navigation.Screen
 
 
 @Composable
-fun LoginScreen(navController: NavController){
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel){
+
+    var email by remember {
+        mutableStateOf("")
+    }
+
+    var password by remember {
+        mutableStateOf("")
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +73,6 @@ fun LoginScreen(navController: NavController){
                 navController.navigate("sign_up_screen")
             })
 
-            MotionSensorBox()
         }
     }
 }
@@ -68,5 +81,6 @@ fun LoginScreen(navController: NavController){
 @Composable
 fun LoginScreenPreview() {
     val mockNavController = rememberNavController()
-    LoginScreen(mockNavController)
+    val mockAuthViewModel = AuthViewModel()
+    LoginScreen(mockNavController, mockAuthViewModel)
 }

@@ -15,11 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.proiectsma.AuthViewModel
 import com.example.proiectsma.DataSource
 import com.example.proiectsma.components.AnnouncementList
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, authViewModel: AuthViewModel){
     val layoutDirection = LocalLayoutDirection.current
     Surface(
         modifier = Modifier
