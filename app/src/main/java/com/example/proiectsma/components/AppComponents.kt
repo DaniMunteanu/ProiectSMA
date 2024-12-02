@@ -30,6 +30,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Mail
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -143,7 +145,7 @@ fun PasswordTextField(labelValue : String, icon : ImageVector) {
     OutlinedTextField(
         value = password,
         onValueChange = { password = it },
-        label = { Text(text=labelValue) },
+        label = { Text(text="Password") },
         colors = TextFieldDefaults.colors(
             focusedLabelColor = Color.Red,
             cursorColor = Color.Red
@@ -151,7 +153,7 @@ fun PasswordTextField(labelValue : String, icon : ImageVector) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = Modifier.fillMaxWidth(),
         leadingIcon = {
-            Icon(icon, contentDescription = "")
+            Icon(Icons.Rounded.Lock, contentDescription = "")
         },
         trailingIcon = {
             val iconImage = if(passwordVisible) {

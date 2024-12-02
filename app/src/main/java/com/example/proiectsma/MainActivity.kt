@@ -6,7 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,15 +27,39 @@ import com.google.firebase.FirebaseApp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         val authViewModel : AuthViewModel by viewModels()
         FirebaseApp.initializeApp(this)
 
         setContent{
+
+            /*
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "login_screen", builder = {
+                composable("sign_up_screen") {
+                    SignUpScreen( navController, authViewModel)
+                }
+                composable("login_screen") {
+                    LoginScreen( navController, authViewModel)
+                }
+                composable("home_screen") {
+                    HomeScreen( navController, authViewModel)
+                }
+            })
+             */
+
             AppNavigation(authViewModel = authViewModel)
+
+            /*
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    AppNavigation(modifier = Modifier.padding(innerPadding), authViewModel = authViewModel)
+
+                }
+
+             */
         }
-    }
+
         /*
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -39,6 +67,11 @@ class MainActivity : ComponentActivity() {
             insets
         }
          */
+
+    }
+
+
+
 }
 
 /*
