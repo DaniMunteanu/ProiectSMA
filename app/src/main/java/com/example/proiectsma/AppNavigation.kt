@@ -12,7 +12,7 @@ import com.example.proiectsma.screens.SignUpScreen
 @Composable
 fun AppNavigation( authViewModel: AuthViewModel) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login_screen", builder = {
+    NavHost(navController = navController, startDestination = "home_screen", builder = {
         composable("signup_screen") {
             SignUpScreen( navController, authViewModel)
         }
