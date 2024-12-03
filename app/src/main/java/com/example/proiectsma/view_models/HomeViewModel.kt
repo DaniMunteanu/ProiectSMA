@@ -1,15 +1,13 @@
-package com.example.proiectsma
+package com.example.proiectsma.view_models
 
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.proiectsma.model.Channel
-import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -17,6 +15,7 @@ class HomeViewModel : ViewModel() {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance("https://proiectsma-firebase-default-rtdb.europe-west1.firebasedatabase.app")
     private val databaseReference = firebaseDatabase.getReference("channel")
+
     private val _channels = MutableStateFlow<List<Channel>>(emptyList())
     val channels = _channels.asStateFlow()
 

@@ -42,19 +42,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.proiectsma.AuthState
-import com.example.proiectsma.AuthViewModel
-import com.example.proiectsma.components.ButtonComponent
+import com.example.proiectsma.view_models.AuthState
+import com.example.proiectsma.view_models.AuthViewModel
 import com.example.proiectsma.components.ClickableLoginTextComponent
 import com.example.proiectsma.components.DividerTextComponent
 import com.example.proiectsma.components.HeadingTextComponent
 import com.example.proiectsma.components.NormalTextComponent
-import com.example.proiectsma.components.PasswordTextField
 import com.example.proiectsma.components.RegularTextField
-import com.example.proiectsma.navigation.PCRepairAppRouter
-import com.example.proiectsma.navigation.Screen
 
 @Composable
 fun SignUpScreen( navController: NavController, authViewModel: AuthViewModel) {

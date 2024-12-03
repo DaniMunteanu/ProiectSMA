@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Mail
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -48,19 +47,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.proiectsma.AuthState
-import com.example.proiectsma.AuthViewModel
-import com.example.proiectsma.components.ButtonComponent
+import com.example.proiectsma.view_models.AuthState
+import com.example.proiectsma.view_models.AuthViewModel
 import com.example.proiectsma.components.ClickableLoginTextComponent
 import com.example.proiectsma.components.DividerTextComponent
 import com.example.proiectsma.components.HeadingTextComponent
-import com.example.proiectsma.components.MotionSensorBox
 import com.example.proiectsma.components.NormalTextComponent
-import com.example.proiectsma.components.PasswordTextField
-import com.example.proiectsma.components.RegularTextField
 import com.example.proiectsma.components.UnderlinedTextComponent
-import com.example.proiectsma.navigation.PCRepairAppRouter
-import com.example.proiectsma.navigation.Screen
 
 
 @Composable

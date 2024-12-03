@@ -24,10 +24,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Lock
@@ -51,13 +54,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.approachLayout
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -66,6 +72,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -75,6 +82,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getSystemService
+import com.example.proiectsma.model.Message
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 fun NormalTextComponent(value: String){
@@ -233,7 +243,7 @@ fun ClickableLoginTextComponent(tryingToLogin : Boolean = true, onTextSelected: 
 }
 
 @Composable
-fun UnderlinedTextComponent(value: String){
+fun UnderlinedTextComponent(value : String){
     Text(
         text = value,
         modifier = Modifier
@@ -357,4 +367,81 @@ fun MotionSensorBox() {
                 fontWeight = FontWeight.Bold
             )
         }
+}
+
+@Composable
+fun ChatMessages(messages : List<Message>, onSendMessage : (String) -> Unit) {
+    val hideKeyboardController = LocalSoftwareKeyboardController.current
+
+    val msg = remember {
+        mutableStateOf("")
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn {
+            items(messages) { message ->
+                ChatBubble(message = message)
+            }
+        }
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(8.dp)
+                .background(Color.LightGray),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            TextField(
+                value = msg.value,
+                onValueChange = { msg.value = it },
+                modifier = Modifier.weight(1f),
+                placeholder = { Text(text = "Type a message") },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        hideKeyboardController?.hide()
+                    }
+                )
+            )
+            IconButton(onClick = {
+                onSendMessage(msg.value)
+                msg.value = ""
+            }) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.Send, contentDescription = "send")
+            }
+        }
+    }
+}
+
+@Composable
+fun ChatBubble(message: Message) {
+    val isCurrentUser = (message.senderId == Firebase.auth.currentUser?.uid)
+    val bubbleColor = if (isCurrentUser) {
+        Color.Blue
+    } else {
+        Color.Green
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp, horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        val alignment = if(isCurrentUser) Alignment.CenterStart else Alignment.CenterEnd
+        Box(
+            contentAlignment = alignment,
+            modifier = Modifier
+                .padding(8.dp)
+                .background(color = bubbleColor, shape = RoundedCornerShape(8.dp))
+        ) {
+            Text(
+                text = message.message,
+                color = Color.White,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
 }

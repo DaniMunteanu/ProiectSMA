@@ -1,9 +1,9 @@
 package com.example.proiectsma.model
 
 data class Channel(
-    var id : String,
-    var name : String,
-    var createdAt : Long) {
+    val id : String,
+    val name : String,
+    val createdAt : Long) {
 
-    constructor() : this("","",0L)
+    constructor() : this("","",System.currentTimeMillis())
 }
