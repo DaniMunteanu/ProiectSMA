@@ -423,12 +423,10 @@ fun ChatBubble(message: Message) {
     } else {
         Color.Green
     }
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.Bottom
     ) {
         val alignment = if(isCurrentUser) Alignment.CenterStart else Alignment.CenterEnd
         Box(
@@ -436,6 +434,7 @@ fun ChatBubble(message: Message) {
             modifier = Modifier
                 .padding(8.dp)
                 .background(color = bubbleColor, shape = RoundedCornerShape(8.dp))
+                .align(alignment)
         ) {
             Text(
                 text = message.message,

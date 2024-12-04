@@ -28,11 +28,11 @@ class ChatViewModel : ViewModel() {
             Firebase.auth.currentUser?.displayName ?: "",
             System.currentTimeMillis()
         )
-        firebaseDatabase.getReference("messages").child(channelId).push().setValue(message)
+        firebaseDatabase.reference.child("messages").child(channelId).push().setValue(message)
     }
 
     fun listenForMessages(channelId : String) {
-        firebaseDatabase.getReference("messages").child(channelId).orderByChild("createdAt")
+        firebaseDatabase.reference.child("messages").child(channelId).orderByChild("createdAt")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var list = mutableListOf<Message>()

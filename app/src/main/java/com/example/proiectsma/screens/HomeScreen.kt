@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -61,7 +62,7 @@ fun HomeScreen( navController: NavController, authViewModel: AuthViewModel){
                 )
             }
         }
-        ) {
+    ) {
         Box(
             modifier = Modifier
                 .padding(it)
@@ -71,12 +72,15 @@ fun HomeScreen( navController: NavController, authViewModel: AuthViewModel){
             LazyColumn {
                 items(channels.value) { channel ->
                     Column {
-                        Text(text = channel.name
-                            , modifier = Modifier
+                        Text(text = channel.name,
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(Color.Cyan)
+                                .clickable {
+                                    navController.navigate("chat/${channel.id}")
+                                }
                                 .padding(16.dp)
                         )
                     }
@@ -85,14 +89,9 @@ fun HomeScreen( navController: NavController, authViewModel: AuthViewModel){
         }
     }
 
-    /*
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
 
-    ) {
-        Column {
+
+        Column(modifier = Modifier.padding(top = 150.dp)) {
             Text(text = "Home Page")
             TextButton(onClick = {
                 authViewModel.signout()
@@ -101,9 +100,9 @@ fun HomeScreen( navController: NavController, authViewModel: AuthViewModel){
             }
         }
         //AnnouncementList(descriptionList = DataSource().loadDescriptions())
-    }
 
-     */
+
+
 
 
 }

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class HomeViewModel : ViewModel() {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance("https://proiectsma-firebase-default-rtdb.europe-west1.firebasedatabase.app")
-    private val databaseReference = firebaseDatabase.getReference("channel")
+    private val databaseReference = firebaseDatabase.getReference("channels")
 
     private val _channels = MutableStateFlow<List<Channel>>(emptyList())
     val channels = _channels.asStateFlow()
