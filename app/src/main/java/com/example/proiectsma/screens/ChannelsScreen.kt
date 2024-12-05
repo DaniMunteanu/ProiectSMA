@@ -20,14 +20,17 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.proiectsma.view_models.AuthState
 import com.example.proiectsma.view_models.AuthViewModel
 import com.example.proiectsma.view_models.HomeViewModel
 
 @Composable
-fun HomeScreen( navController: NavController, authViewModel: AuthViewModel){
+fun ChannelsScreen(navController: NavController, authViewModel: AuthViewModel){
 
     val authState = authViewModel.authState.observeAsState()
     val homeViewModel = HomeViewModel()
@@ -44,7 +47,9 @@ fun HomeScreen( navController: NavController, authViewModel: AuthViewModel){
     }
 
     Scaffold(
-        modifier = Modifier.padding(top = 20.dp),
+        modifier = Modifier.padding(top = 28.dp),
+
+        /*
         floatingActionButton = {
             Box(
                 modifier = Modifier
@@ -61,15 +66,24 @@ fun HomeScreen( navController: NavController, authViewModel: AuthViewModel){
                     color = Color.White
                 )
             }
-        }
+        },
+
+         */
+        backgroundColor = Color.White
     ) {
         Box(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
         ) {
-            Text(text = "Message channels page")
             LazyColumn {
+                item{
+                    Text(text = "Messages",
+                        color = Color.Blue,
+                        style = TextStyle(fontSize = 18.sp,
+                            fontWeight = FontWeight.Black),
+                        modifier = Modifier.padding(16.dp))
+                }
                 items(channels.value) { channel ->
                     Column {
                         Text(text = channel.name,

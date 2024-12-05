@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import com.example.proiectsma.screens.MainScreen
 import com.example.proiectsma.view_models.AuthViewModel
 import com.google.firebase.FirebaseApp
 
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
 
         setContent{
+            //MainScreen()
 
             /*
             val navController = rememberNavController()
