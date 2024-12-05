@@ -80,7 +80,7 @@ fun ChannelsScreen(navController: NavController, authViewModel: AuthViewModel){
                 item{
                     Text(text = "Messages",
                         color = Color.Blue,
-                        style = TextStyle(fontSize = 18.sp,
+                        style = TextStyle(fontSize = 40.sp,
                             fontWeight = FontWeight.Black),
                         modifier = Modifier.padding(16.dp))
                 }
@@ -103,16 +103,6 @@ fun ChannelsScreen(navController: NavController, authViewModel: AuthViewModel){
         }
     }
 
-
-
-        Column(modifier = Modifier.padding(top = 150.dp)) {
-            Text(text = "Home Page")
-            TextButton(onClick = {
-                authViewModel.signout()
-            }) {
-                Text(text = "Sign out")
-            }
-        }
         //AnnouncementList(descriptionList = DataSource().loadDescriptions())
 
 

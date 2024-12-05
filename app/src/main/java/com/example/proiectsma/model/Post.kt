@@ -5,10 +5,11 @@ data class Post(
     val authorId : String,
     val authorName : String,
     val imgUri : String?,
+    val needHelp : Boolean,
     val title : String,
     val description : String,
     val country : String,
     val city : String,
     val createdAt: Long){
-    constructor() : this("","", "",null, "", "", "", "", System.currentTimeMillis())
+    constructor() : this("","", "",null, true,"", "", "", "", System.currentTimeMillis())
 }
