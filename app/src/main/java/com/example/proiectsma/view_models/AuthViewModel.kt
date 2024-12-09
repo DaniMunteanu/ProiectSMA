@@ -11,6 +11,8 @@ class AuthViewModel : ViewModel() {
     private val _authState = MutableLiveData<AuthState>()
     val authState : LiveData<AuthState> = _authState
 
+    val profileViewModel = ProfileViewModel()
+
     init {
         checkAuthStatus()
     }
@@ -40,7 +42,7 @@ class AuthViewModel : ViewModel() {
             }
     }
 
-    fun signup(email : String, password : String){
+    fun signup(email : String, password : String, userName : String){
 
         if(email.isEmpty() || password.isEmpty()) {
             _authState.value = AuthState.Error("Email or password can't be empty")
@@ -50,8 +52,10 @@ class AuthViewModel : ViewModel() {
         _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener{ task->
-                if(task.isSuccessful)
+                if(task.isSuccessful) {
+                    profileViewModel.createProfile(auth.currentUser!!.uid,userName)
                     _authState.value = AuthState.Authenticated
+                }
                 else
                     _authState.value =
                         AuthState.Error(task.exception?.message ?: "Something went wrong")

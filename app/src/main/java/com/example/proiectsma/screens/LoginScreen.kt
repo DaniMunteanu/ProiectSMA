@@ -57,7 +57,7 @@ import com.example.proiectsma.components.UnderlinedTextComponent
 
 
 @Composable
-fun LoginScreen( navController: NavController, authViewModel: AuthViewModel){
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel){
 
     var email by remember {
         mutableStateOf("")
@@ -76,7 +76,7 @@ fun LoginScreen( navController: NavController, authViewModel: AuthViewModel){
 
     LaunchedEffect(authState.value) {
         when(authState.value){
-            is AuthState.Authenticated -> navController.navigate("home_screen")
+            is AuthState.Authenticated -> navController.navigate("main_screen")
             is AuthState.Error-> Toast.makeText(context,
                 (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
             else -> Unit

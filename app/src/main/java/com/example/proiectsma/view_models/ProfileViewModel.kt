@@ -1,14 +1,17 @@
 package com.example.proiectsma.view_models
 
 import androidx.lifecycle.ViewModel
+import com.example.proiectsma.model.Message
 import com.example.proiectsma.model.Post
 import com.example.proiectsma.model.Profile
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import io.reactivex.internal.util.HalfSerializer.onComplete
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
@@ -19,20 +22,65 @@ class ProfileViewModel : ViewModel() {
     private val _profiles = MutableStateFlow<List<Profile>>(emptyList())
     val profiles = _profiles.asStateFlow()
 
-    val currentUserId = Firebase.auth.currentUser?.uid ?: ""
+    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-    fun createProfile(userName : String) {
-        val profile =  Profile(
-            currentUserId,
-            userName,
-            null,
-            "",
-            System.currentTimeMillis()
-        )
-        firebaseDatabase.reference.child("profiles").child(currentUserId).push().setValue(profile)
+    init {
+        getProfiles()
     }
 
-    fun getPosts() {
+    fun getProfileById(userId : String, onComplete: (Profile?) -> Unit) {
+        firebaseDatabase.reference.child("profiles").child(userId).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val fetchedProfile = snapshot.getValue(Profile::class.java)
+                onComplete(fetchedProfile)
+            }override fun onCancelled(error: DatabaseError) {
+                println("Error: ${error.message}")
+            }
+        })
+
+
+
+
+
+
+        /*
+        get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val fetchedProfile = snapshot.getValue(Profile::class.java)
+                onComplete(fetchedProfile)
+            } else {
+                onComplete(null)
+            }
+        }.addOnFailureListener { exception ->
+            println("Error fetching data: ${exception.message}")
+            onComplete(null)
+        }
+
+         */
+    }
+
+    fun createProfile(userId : String ,userName : String) {
+        val profile =  Profile(
+            userId,
+            userName,
+            null,
+            "No description yet",
+            System.currentTimeMillis()
+        )
+        firebaseDatabase.getReference("profiles").child(userId).setValue(profile)
+        /*
+        reference.push().setValue(profile).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                println("Custom user data saved successfully.")
+            } else {
+                println("Failed to save custom user data: ${task.exception?.message}")
+            }
+        }
+
+         */
+    }
+
+    fun getProfiles() {
         firebaseDatabase.reference.child("profiles").orderByChild("createdAt")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {

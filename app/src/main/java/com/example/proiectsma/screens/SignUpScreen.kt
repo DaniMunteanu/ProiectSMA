@@ -53,11 +53,15 @@ import com.example.proiectsma.components.RegularTextField
 
 @Composable
 fun SignUpScreen( navController: NavController, authViewModel: AuthViewModel) {
-
+    var firstName by remember {
+        mutableStateOf("")
+    }
+    var lastName by remember {
+        mutableStateOf("")
+    }
     var email by remember {
         mutableStateOf("")
     }
-
     var password by remember {
         mutableStateOf("")
     }
@@ -67,7 +71,7 @@ fun SignUpScreen( navController: NavController, authViewModel: AuthViewModel) {
 
     LaunchedEffect(authState.value) {
         when(authState.value){
-            is AuthState.Authenticated -> navController.navigate("home_screen")
+            is AuthState.Authenticated -> navController.navigate("main_screen")
             is AuthState.Error-> Toast.makeText(context,
                 (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
             else -> Unit
@@ -84,9 +88,36 @@ fun SignUpScreen( navController: NavController, authViewModel: AuthViewModel) {
             NormalTextComponent(value = "Hey there,")
             HeadingTextComponent(value = "Create an Account")
             Spacer(modifier = Modifier.height(20.dp))
-            RegularTextField(labelValue = "First Name", icon = Icons.Rounded.Person)
-            RegularTextField(labelValue = "Last Name", icon = Icons.Rounded.Person)
-
+            //RegularTextField(labelValue = "First Name", icon = Icons.Rounded.Person)
+            OutlinedTextField(
+                value = firstName,
+                onValueChange = { firstName = it },
+                label = { Text(text="First Name") },
+                colors = TextFieldDefaults.colors(
+                    focusedLabelColor = Color.Red,
+                    cursorColor = Color.Red
+                ),
+                keyboardOptions = KeyboardOptions.Default,
+                modifier = Modifier.fillMaxWidth(),
+                leadingIcon = {
+                    Icon(Icons.Rounded.Person, contentDescription = "")
+                }
+            )
+            //RegularTextField(labelValue = "Last Name", icon = Icons.Rounded.Person)
+            OutlinedTextField(
+                value = lastName,
+                onValueChange = { lastName = it },
+                label = { Text(text="Last Name") },
+                colors = TextFieldDefaults.colors(
+                    focusedLabelColor = Color.Red,
+                    cursorColor = Color.Red
+                ),
+                keyboardOptions = KeyboardOptions.Default,
+                modifier = Modifier.fillMaxWidth(),
+                leadingIcon = {
+                    Icon(Icons.Rounded.Person, contentDescription = "")
+                }
+            )
 
             //RegularTextField(labelValue = "Email", icon = Icons.Rounded.Mail)
             OutlinedTextField(
@@ -122,7 +153,7 @@ fun SignUpScreen( navController: NavController, authViewModel: AuthViewModel) {
 
             Spacer(modifier = Modifier.height(20.dp))
             //ButtonComponent(value = "Register", onButtonSelected = { navController.navigate("home_screen") })
-            Button(onClick = { authViewModel.signup(email,password) },
+            Button(onClick = { authViewModel.signup(email,password, "$firstName $lastName") },
                 enabled = authState.value != AuthState.Loading,
                 modifier = Modifier
                     .fillMaxWidth()
