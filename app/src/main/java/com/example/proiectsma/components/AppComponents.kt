@@ -13,12 +13,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -82,7 +84,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.navigation.NavController
 import com.example.proiectsma.model.Message
+import com.example.proiectsma.model.Post
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
@@ -441,6 +445,35 @@ fun ChatBubble(message: Message) {
                 color = Color.White,
                 modifier = Modifier.padding(8.dp)
             )
+        }
+    }
+}
+
+@Composable
+fun PostItem(post : Post, navController: NavController) {
+    val postColor = if (post.needHelp) {
+        Color.Cyan
+    } else {
+        Color.Green
+    }
+    val helpText = if (post.needHelp) {
+        "I need help"
+    } else {
+        "I can offer help"
+    }
+
+    Card(
+        backgroundColor = postColor,
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Column {
+            Text(text = post.authorName, modifier = Modifier
+                .clickable { navController.navigate("profile/${post.authorId}") })
+            Text(text = helpText)
+            Text(text = post.title)
+            Text(text = "${post.country},${post.city}")
+            Text(text = post.description)
         }
     }
 }

@@ -42,7 +42,7 @@ class PostViewModel : ViewModel() {
             city,
             System.currentTimeMillis()
         )
-        firebaseDatabase.reference.child("posts").child(currentUserId).push().setValue(post)
+        firebaseDatabase.getReference("posts").push().setValue(post)
     }
 
     fun getPosts() {

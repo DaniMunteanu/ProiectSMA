@@ -28,8 +28,8 @@ import com.example.proiectsma.view_models.AuthViewModel
 fun MainScreen(navController: NavController, authViewModel: AuthViewModel) {
 
     val navItemList = listOf(
-        NavItem("Announcements", Icons.Default.Search),
         NavItem("Messages", Icons.Default.Mail),
+        NavItem("Announcements", Icons.Default.Search),
         NavItem("My Profile", Icons.Default.AccountCircle)
     )
 

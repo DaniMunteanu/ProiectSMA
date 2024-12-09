@@ -24,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.proiectsma.components.ChatBubble
+import com.example.proiectsma.components.PostItem
 import com.example.proiectsma.view_models.PostViewModel
 
 @Composable
@@ -45,7 +47,7 @@ fun PostsScreen(modifier : Modifier, navController : NavController) {
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color.Blue)
                     .clickable {
-                        // TO DO
+                        navController.navigate("create_post")
                     }
             ) {
                 Text(
@@ -67,13 +69,17 @@ fun PostsScreen(modifier : Modifier, navController : NavController) {
                 .fillMaxSize()
         ) {
             LazyColumn {
-                item{
+                item {
                     Text(text = "Announcements",
                         color = Color.Blue,
                         style = TextStyle(fontSize = 40.sp,
                             fontWeight = FontWeight.Black),
                         modifier = Modifier.padding(16.dp))
                 }
+                items(posts.value) { post ->
+                    PostItem(post, navController)
+                }
+
                 /*
                 items(channels.value) { channel ->
                     Column {

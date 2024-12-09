@@ -12,6 +12,7 @@ import com.example.proiectsma.screens.ChatScreen
 import com.example.proiectsma.screens.CreatePostScreen
 import com.example.proiectsma.screens.LoginScreen
 import com.example.proiectsma.screens.MainScreen
+import com.example.proiectsma.screens.ProfileScreen
 import com.example.proiectsma.screens.SignUpScreen
 import com.example.proiectsma.view_models.AuthViewModel
 
@@ -30,6 +31,14 @@ fun AppNavigation(authViewModel: AuthViewModel) {
         }
         composable("create_post") {
             CreatePostScreen(navController)
+        }
+        composable("profile/{profileId}", arguments = listOf(
+            navArgument("profileId") {
+                type = NavType.StringType
+            }
+        )) {
+            val profileId = it.arguments?.getString("profileId") ?: ""
+            ProfileScreen(navController,authViewModel,profileId)
         }
         composable("chat/{channelId}", arguments = listOf(
             navArgument("channelId") {

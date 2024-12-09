@@ -45,7 +45,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 @Composable
-fun ProfileScreen(modifier : Modifier, navController: NavController, authViewModel : AuthViewModel, profileId : String?) {
+fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, profileId : String?) {
     val isCurrentUser = (profileId == Firebase.auth.currentUser?.uid)
     val authState = authViewModel.authState.observeAsState()
 

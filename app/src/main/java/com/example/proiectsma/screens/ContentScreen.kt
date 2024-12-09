@@ -13,8 +13,8 @@ fun ContentScreen(modifier : Modifier = Modifier, selectedIndex : Int, navContro
     val auth : FirebaseAuth = FirebaseAuth.getInstance()
 
     when(selectedIndex) {
-        0 -> PostsScreen(modifier, navController)
-        1 -> ChannelsScreen(navController, authViewModel)
-        2 -> ProfileScreen(modifier, navController, authViewModel, auth.currentUser!!.uid)
+        0 -> ChannelsScreen(navController, authViewModel)
+        1 -> PostsScreen(modifier, navController)
+        2 -> ProfileScreen(navController, authViewModel, auth.currentUser!!.uid)
     }
 }
