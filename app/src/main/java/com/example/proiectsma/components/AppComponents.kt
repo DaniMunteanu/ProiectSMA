@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -465,15 +466,44 @@ fun PostItem(post : Post, navController: NavController) {
     Card(
         backgroundColor = postColor,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp)
     ) {
-        Column {
-            Text(text = post.authorName, modifier = Modifier
-                .clickable { navController.navigate("profile/${post.authorId}") })
-            Text(text = helpText)
-            Text(text = post.title)
-            Text(text = "${post.country},${post.city}")
-            Text(text = post.description)
+        Column (modifier = Modifier
+            .width(100.dp)
+            )    {
+            Row(horizontalArrangement = Arrangement.spacedBy(40.dp)) {
+                Text(text = post.authorName, modifier = Modifier
+                    .clickable { navController.navigate("profile/${post.authorId}") },
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ))
+                Text(text = post.title,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal
+                    ))
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(40.dp)) {
+                Text(text = helpText,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Normal
+                    ))
+                Text(text = "${post.country},${post.city}",
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Normal
+                    ))
+            }
+
+            Text(text = post.description, modifier = Modifier.padding(top = 20.dp))
         }
     }
 }
