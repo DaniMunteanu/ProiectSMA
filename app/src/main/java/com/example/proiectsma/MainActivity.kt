@@ -5,12 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import com.example.proiectsma.biometric.BiometricPromptManager
 import com.example.proiectsma.screens.MainScreen
 import com.example.proiectsma.view_models.AuthViewModel
 import com.google.firebase.FirebaseApp
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private val promptManager by lazy {
+        BiometricPromptManager(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -35,7 +42,7 @@ class MainActivity : ComponentActivity() {
             })
              */
 
-            AppNavigation(authViewModel = authViewModel)
+            AppNavigation(authViewModel = authViewModel, promptManager)
 
             /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

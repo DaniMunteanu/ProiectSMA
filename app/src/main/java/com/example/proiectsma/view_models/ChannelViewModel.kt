@@ -3,15 +3,19 @@ package com.example.proiectsma.view_models
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.proiectsma.model.Channel
+import com.example.proiectsma.model.Profile
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import io.reactivex.internal.util.HalfSerializer.onComplete
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.UUID
 
-class HomeViewModel : ViewModel() {
+class ChannelViewModel() : ViewModel() {
 
     private val firebaseDatabase = FirebaseDatabase.getInstance("https://proiectsma-firebase-default-rtdb.europe-west1.firebasedatabase.app")
     private val databaseReference = firebaseDatabase.getReference("channels")
@@ -23,26 +27,35 @@ class HomeViewModel : ViewModel() {
         getChannels()
     }
 
-    fun getChannels() {
+    fun createChannel(user1Id : String, user2Id : String, onComplete: (String) -> Unit) {
+        val channel =  Channel(
+            firebaseDatabase.reference.push().key ?: UUID.randomUUID().toString(),
+            user1Id,
+            user2Id,
+            System.currentTimeMillis()
+        )
+        firebaseDatabase.getReference("channels").child(user1Id).setValue(channel)
+        onComplete(channel.channelId)
+    }
 
-        /*
-        val connectedRef = Firebase.database.getReference(".info/connected")
-        connectedRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val connected = snapshot.getValue(Boolean::class.java) ?: false
-                if (connected) {
-                    Log.d(TAG, "connected")
-                } else {
-                    Log.d(TAG, "not connected")
+    fun findChannel(currentUserId : String?, targetUserId : String?, onComplete: (Channel?) -> Unit) {
+        if (currentUserId != null) {
+            firebaseDatabase.reference.child("channels").child(currentUserId).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (dataSnapshot in snapshot.children) {
+                        val fetchedChannel = snapshot.getValue(Channel::class.java)
+                        if (fetchedChannel != null && fetchedChannel.user2Id == targetUserId) {
+                            onComplete(fetchedChannel)
+                        }
+                    }
+                }override fun onCancelled(error: DatabaseError) {
+                    println("Error: ${error.message}")
                 }
-            }
+            })
+        }
+    }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Listener was cancelled")
-            }
-        })
-         */
-
+    fun getChannels() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val list = mutableListOf<Channel>()
@@ -51,7 +64,6 @@ class HomeViewModel : ViewModel() {
                         val channel = channelSnapshot.getValue(Channel::class.java)
                         //channel?.let { list.add(it) }
                         list.add(channel!!)
-                        Log.d(TAG, channel.name)
                     }
                     _channels.value = list
                 }

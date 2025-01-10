@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+    implementation("androidx.biometric:biometric:1.1.0")
+
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-analytics")
 

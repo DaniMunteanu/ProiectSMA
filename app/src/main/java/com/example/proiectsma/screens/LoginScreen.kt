@@ -1,7 +1,16 @@
 package com.example.proiectsma.screens
 
+import android.content.Intent
+import android.hardware.biometrics.BiometricManager
+import android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import android.os.Build
+import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +22,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -28,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.proiectsma.biometric.BiometricPromptManager
 import com.example.proiectsma.view_models.AuthState
 import com.example.proiectsma.view_models.AuthViewModel
 import com.example.proiectsma.components.ClickableLoginTextComponent
@@ -57,7 +69,7 @@ import com.example.proiectsma.components.UnderlinedTextComponent
 
 
 @Composable
-fun LoginScreen(navController: NavController, authViewModel: AuthViewModel){
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel, promptManager: BiometricPromptManager){
 
     var email by remember {
         mutableStateOf("")
@@ -145,7 +157,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel){
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            UnderlinedTextComponent(value = "Forgot your password?")
+            //UnderlinedTextComponent(value = "Forgot your password?")
 
             //ButtonComponent(value = "Log in", onButtonSelected = { navController.navigate("home_screen") })
             Button(onClick = { authViewModel.login(email,password) },
@@ -179,13 +191,65 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel){
             })
 
         }
-    }
-}
 
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    val mockNavController = rememberNavController()
-    val mockAuthViewModel = AuthViewModel()
-    LoginScreen( mockNavController, mockAuthViewModel)
+        val biometricResult by promptManager.promptResults.collectAsState(initial = null)
+        val enrollLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+            onResult = {
+                println("Activity result: $it")
+            }
+        )
+        LaunchedEffect(biometricResult) {
+            if(biometricResult is BiometricPromptManager.BiometricResult.AuthenticationNotSet) {
+                if(Build.VERSION.SDK_INT >= 30) {
+                    val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                        putExtra(
+                            Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                            BiometricManager.Authenticators.BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+                        )
+                    }
+                    enrollLauncher.launch(enrollIntent)
+                }
+            }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = {
+                promptManager.showBiometricPrompt(
+                    title = "Sample prompt",
+                    description = "Sample prompt description"
+                )
+            }) {
+                Text(text = "Authenticate")
+            }
+            biometricResult?.let { result ->
+                Text(
+                    text = when(result) {
+                        is BiometricPromptManager.BiometricResult.AuthenticationError -> {
+                            result.error
+                        }
+                        BiometricPromptManager.BiometricResult.AuthenticationFailed -> {
+                            "Authentication failed"
+                        }
+                        BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {
+                            "Authentication not set"
+                        }
+                        BiometricPromptManager.BiometricResult.AuthenticationSuccess-> {
+                            "Authentication success"
+                        }
+                        BiometricPromptManager.BiometricResult.FeatureUnavailable -> {
+                            "Feature unavailable"
+                        }
+                        BiometricPromptManager.BiometricResult.HardwareUnavailable -> {
+                            "Hardware unavailable"
+                        }
+                    }
+                )
+            }
+        }
+    }
 }

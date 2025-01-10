@@ -13,7 +13,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,16 +44,19 @@ import com.example.proiectsma.components.ButtonComponent
 import com.example.proiectsma.components.HeadingTextComponent
 import com.example.proiectsma.view_models.AuthState
 import com.example.proiectsma.view_models.AuthViewModel
+import com.example.proiectsma.view_models.ChannelViewModel
 import com.example.proiectsma.view_models.ProfileViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 @Composable
-fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, profileId : String?) {
+fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, profileId : String) {
     val isCurrentUser = (profileId == Firebase.auth.currentUser?.uid)
+    val currentUser = Firebase.auth.currentUser!!.uid
     val authState = authViewModel.authState.observeAsState()
 
     val profileViewModel = ProfileViewModel()
+    val channelViewModel = ChannelViewModel()
     //var currentUserName = mutableStateOf("")
 
     var currentUserName by remember {
@@ -60,8 +67,6 @@ fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, p
         mutableStateOf("")
     }
     //var currentDescription = ""
-
-
 
     LaunchedEffect(authState.value) {
         if (profileId != null) {
@@ -87,6 +92,12 @@ fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, p
             .padding(top = 28.dp)
             .fillMaxWidth(),
     ) {
+        if(!isCurrentUser)
+            IconButton(onClick = { navController.navigate("main_screen") },
+                modifier = Modifier
+                    .heightIn(45.dp),
+            ) { Icon(imageVector = Icons.Filled.Close, contentDescription = "") }
+
         Image(
             painter = ColorPainter(Color.Gray),
             contentDescription = "Profile Image",
@@ -113,10 +124,38 @@ fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, p
             color = Color.Black
         )
 
+        var found by remember {
+            mutableStateOf(false)
+        }
+
         if(isCurrentUser)
             ButtonComponent(value = "Sign out", onButtonSelected = { authViewModel.signout() } )
         else
-            ButtonComponent(value = "Send Message", onButtonSelected = {} )
+            ButtonComponent(value = "Send Message", onButtonSelected = {
 
+                channelViewModel.findChannel(Firebase.auth.currentUser?.uid,profileId) { currentChannel ->
+                    if (currentChannel != null) {
+                        Log.d(TAG, "A gasit canalul")
+                        navController.navigate("chat/${currentChannel.channelId}")
+                        found = true
+                    }
+                }
+                if(!found) {
+                    channelViewModel.findChannel(profileId,Firebase.auth.currentUser?.uid) { revCurrentChannel ->
+                        if (revCurrentChannel != null) {
+                            Log.d(TAG, "A gasit canalul alta ramura")
+                            navController.navigate("chat/${revCurrentChannel.channelId}")
+                            found = true
+                        }
+                    }
+                }
+                if(!found) {
+                    channelViewModel.createChannel(currentUser, profileId) { createdChannelId ->
+                        navController.navigate("chat/${createdChannelId}")
+                    }
+                }
+
+            }
+            )
     }
 }

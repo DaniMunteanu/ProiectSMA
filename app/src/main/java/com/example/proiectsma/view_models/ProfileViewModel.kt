@@ -37,26 +37,6 @@ class ProfileViewModel : ViewModel() {
                 println("Error: ${error.message}")
             }
         })
-
-
-
-
-
-
-        /*
-        get().addOnSuccessListener { snapshot ->
-            if (snapshot.exists()) {
-                val fetchedProfile = snapshot.getValue(Profile::class.java)
-                onComplete(fetchedProfile)
-            } else {
-                onComplete(null)
-            }
-        }.addOnFailureListener { exception ->
-            println("Error fetching data: ${exception.message}")
-            onComplete(null)
-        }
-
-         */
     }
 
     fun createProfile(userId : String ,userName : String) {
@@ -68,16 +48,6 @@ class ProfileViewModel : ViewModel() {
             System.currentTimeMillis()
         )
         firebaseDatabase.getReference("profiles").child(userId).setValue(profile)
-        /*
-        reference.push().setValue(profile).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                println("Custom user data saved successfully.")
-            } else {
-                println("Failed to save custom user data: ${task.exception?.message}")
-            }
-        }
-
-         */
     }
 
     fun getProfiles() {
