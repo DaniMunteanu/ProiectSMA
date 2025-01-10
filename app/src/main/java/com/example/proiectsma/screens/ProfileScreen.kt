@@ -92,11 +92,10 @@ fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, p
             .padding(top = 28.dp)
             .fillMaxWidth(),
     ) {
-        if(!isCurrentUser)
-            IconButton(onClick = { navController.navigate("main_screen") },
-                modifier = Modifier
-                    .heightIn(45.dp),
-            ) { Icon(imageVector = Icons.Filled.Close, contentDescription = "") }
+        IconButton(onClick = { navController.navigate("main_screen") },
+            modifier = Modifier
+                .heightIn(45.dp),
+        ) { Icon(imageVector = Icons.Filled.Close, contentDescription = "") }
 
         Image(
             painter = ColorPainter(Color.Gray),
@@ -128,33 +127,52 @@ fun ProfileScreen(navController: NavController, authViewModel : AuthViewModel, p
             mutableStateOf(false)
         }
 
+
+
+        fun findingChatRoute() {
+            var chatRoute = ""
+            channelViewModel.findChannel(Firebase.auth.currentUser?.uid,profileId) { currentChannel ->
+                if (currentChannel != null) {
+                    Log.d(TAG, "A gasit canalul")
+                    //navController.navigate("chat/${currentChannel.channelId}")
+                    found = found.not()
+                    chatRoute = "chat/${currentChannel.channelId}"
+                    Log.d(TAG, found.toString())
+                    Log.d(TAG, chatRoute)
+                    return@findChannel
+                }
+            }
+            Log.d(TAG, "Asta este ${chatRoute}")
+            if(found == false) {
+                channelViewModel.findChannel(profileId,Firebase.auth.currentUser?.uid) { revCurrentChannel ->
+                    if (revCurrentChannel != null) {
+                        Log.d(TAG, "A gasit canalul alta ramura")
+                        //navController.navigate("chat/${revCurrentChannel.channelId}")
+                        found = true
+                        chatRoute = "chat/${revCurrentChannel.channelId}"
+                    }
+                }
+            }
+            if(found == false) {
+                channelViewModel.createChannel(currentUser, profileId) { createdChannelId ->
+                    //navController.navigate("chat/${createdChannelId}")
+                    chatRoute = "chat/${createdChannelId}"
+                }
+            }
+            Log.d(TAG, chatRoute)
+            navController.navigate(chatRoute)
+        }
+
         if(isCurrentUser)
             ButtonComponent(value = "Sign out", onButtonSelected = { authViewModel.signout() } )
         else
             ButtonComponent(value = "Send Message", onButtonSelected = {
-
                 channelViewModel.findChannel(Firebase.auth.currentUser?.uid,profileId) { currentChannel ->
                     if (currentChannel != null) {
                         Log.d(TAG, "A gasit canalul")
                         navController.navigate("chat/${currentChannel.channelId}")
-                        found = true
                     }
                 }
-                if(!found) {
-                    channelViewModel.findChannel(profileId,Firebase.auth.currentUser?.uid) { revCurrentChannel ->
-                        if (revCurrentChannel != null) {
-                            Log.d(TAG, "A gasit canalul alta ramura")
-                            navController.navigate("chat/${revCurrentChannel.channelId}")
-                            found = true
-                        }
-                    }
-                }
-                if(!found) {
-                    channelViewModel.createChannel(currentUser, profileId) { createdChannelId ->
-                        navController.navigate("chat/${createdChannelId}")
-                    }
-                }
-
             }
             )
     }

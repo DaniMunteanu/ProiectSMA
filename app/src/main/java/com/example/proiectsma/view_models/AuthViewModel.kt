@@ -3,6 +3,7 @@ package com.example.proiectsma.view_models
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.proiectsma.biometric.BiometricPromptManager
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthViewModel : ViewModel() {
@@ -27,7 +28,7 @@ class AuthViewModel : ViewModel() {
     fun login(email : String, password : String){
 
         if(email.isEmpty() || password.isEmpty()) {
-            _authState.value = AuthState.Error("Email or password can't be emmpty")
+            _authState.value = AuthState.Error("Email or password can't be empty")
             return
         }
 

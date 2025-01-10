@@ -224,7 +224,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel, prom
                     description = "Sample prompt description"
                 )
             }) {
-                Text(text = "Authenticate")
+                Text(text = "Authenticate with Fingerprint")
             }
             biometricResult?.let { result ->
                 Text(
